@@ -1,9 +1,4 @@
 
----
-
-## frontend/vercel.json (Root folder-এ রাখুন)
-
-```json
 {
   "version": 2,
   "builds": [
@@ -26,3 +21,4 @@
     "NEXT_PUBLIC_API_URL": "@api-url"
   }
 }
+
