@@ -3,8 +3,8 @@
 import { 
   FaBox, FaShoppingCart, FaUsers, FaMoneyBillWave, 
   FaArrowUp, FaArrowDown, FaEye, FaEdit, FaTrash,
-  FaDollarSign, FaPackage, FaCartPlus, FaUserPlus,
-  FaChartLine, FaClock, FaCheckCircle, FaPending
+  FaDollarSign, FaCartPlus, FaUserPlus,
+  FaChartLine, FaClock, FaCheckCircle, FaHourglassHalf 
 } from 'react-icons/fa';
 import Link from 'next/link';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
@@ -32,7 +32,7 @@ const stats = [
     title: 'Total Products', 
     value: '856', 
     change: '+3.1%', 
-    icon: FaPackage, 
+    icon: FaBox, // FaPackage এর বদলে FaBox ব্যবহার করা হয়েছে
     color: 'from-purple-500 to-violet-600',
     bgColor: 'bg-purple-50',
     iconColor: 'text-purple-600'
@@ -47,6 +47,8 @@ const stats = [
     iconColor: 'text-orange-600'
   },
 ];
+
+// ... বাকি ডেটা (recentOrders, topProducts, salesData, ইত্যাদি) একই থাকবে ...
 
 const recentOrders = [
   { id: '#SM12345', customer: 'Rahul Ahmed', product: 'Wireless Headphones', amount: 2499, status: 'Pending', date: '2024-01-20', avatar: 'R' },
@@ -95,7 +97,7 @@ const getStatusColor = (status) => {
 
 export default function AdminDashboard() {
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
@@ -289,7 +291,8 @@ export default function AdminDashboard() {
         </div>
         <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-5 text-white">
           <div className="flex items-center justify-between mb-3">
-            <FaClock className="text-2xl opacity-80" />
+            {/* FaPending এর বদলে FaHourglassHalf ব্যবহার করা হয়েছে */}
+            <FaHourglassHalf className="text-2xl opacity-80" />
             <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Today</span>
           </div>
           <p className="text-2xl font-bold">23</p>
