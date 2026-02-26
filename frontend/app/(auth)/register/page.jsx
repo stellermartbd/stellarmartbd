@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebook, FaCheck } from 'react-icons/fa';
 // পাথ আপডেট করা হয়েছে
-import { useAuth } from '@/lib/stores/authStore'; 
+import { useAuth } from '@/lib/hooks/authStore'; 
 import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
@@ -218,3 +218,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+
