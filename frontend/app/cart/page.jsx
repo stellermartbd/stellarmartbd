@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaTrash, FaPlus, FaMinus, FaShoppingBag, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import { useCart } from '@/lib/hooks/useCart';
+import { useCart } from '@/lib/stores/useCart';
 import toast from 'react-hot-toast';
 
 export default function CartPage() {
@@ -212,4 +212,5 @@ export default function CartPage() {
       </div>
     </div>
   );
+
 }
