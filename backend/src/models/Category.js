@@ -1,52 +1,55 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const mongoose = require('mongoose');
 
-const Category = sequelize.define('Category', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  name_en: {
-    type: DataTypes.STRING(100),
-    allowNull: false
-  },
-  name_bn: {
-    type: DataTypes.STRING(100)
+const categorySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Category name is required'],
+    trim: true
   },
   slug: {
-    type: DataTypes.STRING(100),
-    allowNull: false,
-    unique: true
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true
   },
   description: {
-    type: DataTypes.TEXT
+    type: String,
+    default: ''
   },
   icon: {
-    type: DataTypes.STRING(255)
+    type: String,
+    default: ''
   },
   image: {
-    type: DataTypes.STRING(255)
+    type: String,
+    default: ''
   },
-  parent_id: {
-    type: DataTypes.INTEGER,
-    defaultValue: null
+  parent: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    default: null
   },
-  is_featured: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
+  isFeatured: {
+    type: Boolean,
+    default: false
   },
-  is_active: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
+  isActive: {
+    type: Boolean,
+    default: true
   },
-  order_by: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
+  order: {
+    type: Number,
+    default: 0
   }
 }, {
-  tableName: 'categories',
   timestamps: true
 });
 
-module.exports = Category;
+categorySchema.pre('save', function(next) {
+  if (this.isModified('name')) {
+    this.slug = this.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+  next();
+});
+
+module.exports = mongoose.model('Category', categorySchema);
