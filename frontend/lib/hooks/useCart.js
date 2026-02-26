@@ -1,30 +1,32 @@
+// hooks/useCart.js
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export const useCart = create(
   persist(
     (set, get) => ({
-      items: [],
+      cartItems: [],
       addToCart: (product, quantity = 1) => {
-        const items = get().items;
-        const existingItem = items.find((item) => item._id === product._id);
-        
+        const currentItems = get().cartItems;
+        const existingItem = currentItems.find((item) => item._id === product._id);
+
         if (existingItem) {
           set({
-            items: items.map((item) =>
-              item._id === product._id
-                ? { ...item, quantity: item.quantity + quantity }
-                : item
+            cartItems: currentItems.map((item) =>
+              item._id === product._id 
+              ? { ...item, qty: item.qty + quantity } 
+              : item
             ),
           });
         } else {
-          set({ items: [...items, { ...product, quantity }] });
+          set({ cartItems: [...currentItems, { ...product, qty: quantity }] });
         }
       },
-      removeFromCart: (productId) =>
-        set({ items: get().items.filter((item) => item._id !== productId) }),
-      clearCart: () => set({ items: [] }),
+      removeFromCart: (id) => set({
+        cartItems: get().cartItems.filter((item) => item._id !== id)
+      }),
+      clearCart: () => set({ cartItems: [] }),
     }),
-    { name: 'cart-storage' }
+    { name: 'cart-storage' } // এটি ইউজার ব্রাউজার রিফ্রেশ দিলেও ডেটা হারাবে না
   )
 );
