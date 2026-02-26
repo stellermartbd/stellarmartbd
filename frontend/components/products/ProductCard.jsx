@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { FaShoppingCart, FaHeart, FaEye, FaStar } from 'react-icons/fa';
 // '@/lib/stores/cartStore' পাথ ব্যবহার করা হয়েছে
-import { useCart } from '@/lib/stores/cartStore'; 
+import { useCart } from '@/lib/hooks/cartStore'; 
 import toast from 'react-hot-toast';
 
 const ProductCard = ({ product, showActions = true }) => {
@@ -85,3 +85,4 @@ const ProductCard = ({ product, showActions = true }) => {
 };
 
 export default ProductCard;
+
