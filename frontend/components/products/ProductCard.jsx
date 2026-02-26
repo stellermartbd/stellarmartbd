@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { FaShoppingCart, FaHeart, FaEye, FaStar } from 'react-icons/fa';
-// '@/lib/stores/cartStore' থেকে সঠিক হুকটি ইমপোর্ট করা হয়েছে
+// '@/lib/stores/cartStore' পাথ ব্যবহার করা হয়েছে
 import { useCart } from '@/lib/stores/cartStore'; 
 import toast from 'react-hot-toast';
 
@@ -11,10 +11,11 @@ const ProductCard = ({ product, showActions = true }) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   
-  // আপনার cartStore-এর useCart হুক থেকে addToCart নেওয়া হয়েছে
-  const { addToCart } = useCart(); 
+  // cartStore থেকে কাস্টম হুক useCart কল করা হয়েছে
+  const cart = useCart();
+  // আপনার স্টোর কোড অনুযায়ী ফাংশনের নাম 'addToCart'
+  const addToCart = cart?.addToCart;
 
-  // ডিসকাউন্ট পারসেন্টেজ ক্যালকুলেশন
   const discountPercent = product.discount || (product.regular_price ? Math.round(((product.regular_price - product.selling_price) / product.regular_price) * 100) : 0);
 
   const handleAddToCart = (e) => {
@@ -22,11 +23,10 @@ const ProductCard = ({ product, showActions = true }) => {
     e.stopPropagation();
     
     if (addToCart) {
-      // আপনার স্টোর অনুযায়ী প্রোডাক্ট অবজেক্ট পাঠানো হচ্ছে
       addToCart(product, 1);
       toast.success(`${product.name} added to cart!`);
     } else {
-      toast.error('Cart function not found!');
+      toast.error('Cart functionality is not ready yet');
     }
   };
 
@@ -40,10 +40,8 @@ const ProductCard = ({ product, showActions = true }) => {
   return (
     <Link href={`/products/${product.slug || ''}`} className="group block h-full">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:border-blue-100 transition-all duration-300 flex flex-col h-full">
-        
         {/* Image Container */}
         <div className="relative aspect-square overflow-hidden bg-gray-50">
-          {/* Loading Skeleton/Spinner */}
           <div className={`absolute inset-0 flex items-center justify-center bg-gray-100 transition-opacity duration-500 ${imageLoaded ? 'opacity-0' : 'opacity-100'}`}>
             <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
@@ -55,34 +53,18 @@ const ProductCard = ({ product, showActions = true }) => {
             onLoad={() => setImageLoaded(true)}
           />
 
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2">
-            {discountPercent > 0 && (
-              <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">
-                -{discountPercent}%
-              </span>
-            )}
-            {product.is_new && (
-              <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">
-                NEW
-              </span>
-            )}
-          </div>
-
-          {/* Action Buttons */}
+          {/* Action Buttons Overlay */}
           {showActions && (
             <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
               <button
                 onClick={handleWishlist}
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 shadow-lg ${isWishlisted ? 'bg-red-500 text-white' : 'bg-white text-gray-600 hover:text-red-500'}`}
-                title="Wishlist"
+                className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg ${isWishlisted ? 'bg-red-500 text-white' : 'bg-white text-gray-600'}`}
               >
                 <FaHeart size={16} />
               </button>
               <button
                 onClick={handleAddToCart}
-                className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 hover:bg-blue-700"
-                title="Add to Cart"
+                className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg"
               >
                 <FaShoppingCart size={16} />
               </button>
@@ -90,35 +72,11 @@ const ProductCard = ({ product, showActions = true }) => {
           )}
         </div>
 
-        {/* Product Details */}
+        {/* Details Area */}
         <div className="p-4 flex flex-col flex-grow">
-          <span className="text-[10px] text-blue-500 font-bold uppercase tracking-wider mb-1">
-            {product.category?.name || 'StellarMart'}
-          </span>
-          <h3 className="font-bold text-gray-800 text-sm mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
-            {product.name}
-          </h3>
-
+          <h3 className="font-bold text-gray-800 text-sm mb-2 line-clamp-2">{product.name}</h3>
           <div className="mt-auto">
-            <div className="flex items-center gap-1 mb-3">
-              {[...Array(5)].map((_, i) => (
-                <FaStar key={i} size={10} className={i < Math.round(product.rating || 4) ? 'text-yellow-400' : 'text-gray-200'} />
-              ))}
-              <span className="text-[10px] text-gray-400 font-medium">({product.reviews || 0})</span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col">
-                <span className="text-blue-600 font-extrabold text-base">
-                  ৳{product.selling_price?.toLocaleString()}
-                </span>
-                {product.regular_price > product.selling_price && (
-                  <span className="text-[11px] text-gray-400 line-through">
-                    ৳{product.regular_price?.toLocaleString()}
-                  </span>
-                )}
-              </div>
-            </div>
+             <span className="text-blue-600 font-extrabold text-base">৳{product.selling_price?.toLocaleString()}</span>
           </div>
         </div>
       </div>
