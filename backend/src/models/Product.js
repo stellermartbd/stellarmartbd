@@ -1,130 +1,101 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const mongoose = require('mongoose');
 
-const Product = sequelize.define('Product', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  name_en: {
-    type: DataTypes.STRING(255),
-    allowNull: false
-  },
-  name_bn: {
-    type: DataTypes.STRING(255)
+const productSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Product name is required'],
+    trim: true
   },
   slug: {
-    type: DataTypes.STRING(255),
-    allowNull: false,
-    unique: true
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true
   },
   sku: {
-    type: DataTypes.STRING(100),
-    unique: true
+    type: String,
+    unique: true,
+    sparse: true
   },
-  category_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
+  description: {
+    type: String,
+    default: ''
   },
-  subcategory_id: {
-    type: DataTypes.INTEGER
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true
   },
-  brand_id: {
-    type: DataTypes.INTEGER
+  regularPrice: {
+    type: Number,
+    required: [true, 'Regular price is required'],
+    min: 0
   },
-  seller_id: {
-    type: DataTypes.INTEGER
+  sellingPrice: {
+    type: Number,
+    required: [true, 'Selling price is required'],
+    min: 0
   },
-  regular_price: {
-    type: DataTypes.DECIMAL(12, 2),
-    allowNull: false
+  discountPercent: {
+    type: Number,
+    default: 0
   },
-  selling_price: {
-    type: DataTypes.DECIMAL(12, 2),
-    allowNull: false
+  stockQuantity: {
+    type: Number,
+    default: 0,
+    min: 0
   },
-  discount_price: {
-    type: DataTypes.DECIMAL(12, 2),
-    defaultValue: 0
+  stockStatus: {
+    type: String,
+    enum: ['in_stock', 'out_of_stock', 'pre_order'],
+    default: 'in_stock'
   },
-  discount_percent: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
+  featuredImage: {
+    type: String,
+    default: ''
   },
-  discount_start_date: {
-    type: DataTypes.DATE
+  galleryImages: [{
+    type: String
+  }],
+  isFeatured: {
+    type: Boolean,
+    default: false
   },
-  discount_end_date: {
-    type: DataTypes.DATE
+  isNewArrival: {
+    type: Boolean,
+    default: false
   },
-  stock_quantity: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
+  isBestSeller: {
+    type: Boolean,
+    default: false
   },
-  stock_status: {
-    type: DataTypes.ENUM('in_stock', 'out_of_stock', 'pre_order'),
-    defaultValue: 'in_stock'
+  isActive: {
+    type: Boolean,
+    default: true
   },
-  low_stock_threshold: {
-    type: DataTypes.INTEGER,
-    defaultValue: 5
+  rating: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 5
   },
-  description_en: {
-    type: DataTypes.TEXT
+  reviewCount: {
+    type: Number,
+    default: 0
   },
-  description_bn: {
-    type: DataTypes.TEXT
-  },
-  specification_en: {
-    type: DataTypes.TEXT
-  },
-  specification_bn: {
-    type: DataTypes.TEXT
-  },
-  featured_image: {
-    type: DataTypes.STRING(255)
-  },
-  gallery_images: {
-    type: DataTypes.JSON
-  },
-  video_url: {
-    type: DataTypes.STRING(255)
-  },
-  meta_title: {
-    type: DataTypes.STRING(255)
-  },
-  meta_description: {
-    type: DataTypes.TEXT
-  },
-  meta_keywords: {
-    type: DataTypes.TEXT
-  },
-  is_featured: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
-  is_new_arrival: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
-  is_best_seller: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
-  is_active: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
-  },
-  tags: {
-    type: DataTypes.JSON
-  },
-  created_by: {
-    type: DataTypes.INTEGER
-  }
+  tags: [{
+    type: String
+  }]
 }, {
-  tableName: 'products',
   timestamps: true
 });
 
-module.exports = Product;
+// Create slug
+productSchema.pre('save', function(next) {
+  if (this.isModified('name')) {
+    this.slug = this.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+  next();
+});
+
+module.exports = mongoose.model('Product', productSchema);
