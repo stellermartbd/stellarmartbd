@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebook } from 'react-icons/fa';
-import { useAuth } from '@/lib/hooks/useAuth';
+
+// এখানে পাথটি আপডেট করা হয়েছে
+import { useAuth } from '@/lib/stores/authStore'; 
 import toast from 'react-hot-toast';
 
 export default function LoginPage() {
@@ -11,6 +13,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  
+  // আপনার authStore থেকে login ফাংশনটি নেওয়া হচ্ছে
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
@@ -22,14 +26,15 @@ export default function LoginPage() {
     }
 
     setLoading(true);
+    // login ফাংশন কল করা হচ্ছে
     const result = await login(email, password);
     setLoading(false);
 
-    if (result.success) {
+    if (result && result.success) {
       toast.success('Login successful!');
       window.location.href = '/';
     } else {
-      toast.error(result.error || 'Login failed');
+      toast.error(result?.error || 'Login failed');
     }
   };
 
@@ -39,7 +44,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">
+            <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">
               S
             </div>
             <span className="text-2xl font-bold text-gray-900">StellarMartBD</span>
@@ -79,7 +84,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="input-field"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
 
@@ -92,7 +97,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="input-field pr-12"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none pr-12"
                 />
                 <button
                   type="button"
@@ -107,10 +112,10 @@ export default function LoginPage() {
             {/* Remember & Forgot */}
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 text-primary-600 rounded border-gray-300" />
+                <input type="checkbox" className="w-4 h-4 text-blue-600 rounded border-gray-300" />
                 <span className="text-sm text-gray-600">Remember me</span>
               </label>
-              <Link href="/forgot-password" className="text-sm text-primary-600 hover:underline">
+              <Link href="/forgot-password" className="text-sm text-blue-600 hover:underline">
                 Forgot password?
               </Link>
             </div>
@@ -119,7 +124,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary py-4 text-lg disabled:opacity-50"
+              className="w-full bg-blue-600 text-white py-4 rounded-lg text-lg font-bold hover:bg-blue-700 transition-all disabled:opacity-50"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -135,7 +140,7 @@ export default function LoginPage() {
           {/* Register Link */}
           <p className="text-center text-gray-600 mt-6">
             Don't have an account?{' '}
-            <Link href="/register" className="text-primary-600 font-semibold hover:underline">
+            <Link href="/register" className="text-blue-600 font-semibold hover:underline">
               Register now
             </Link>
           </p>
