@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { FaShoppingCart, FaHeart, FaEye, FaStar } from 'react-icons/fa';
-// '@/lib/stores/cartStore' ব্যবহার করা হয়েছে কারণ আপনার ফাইলটি এখন ঐ ফোল্ডারে আছে
+// '@/lib/stores/cartStore' থেকে সঠিক হুকটি ইমপোর্ট করা হয়েছে
 import { useCart } from '@/lib/stores/cartStore'; 
 import toast from 'react-hot-toast';
 
@@ -11,19 +11,22 @@ const ProductCard = ({ product, showActions = true }) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   
-  // আপনার cartStore-এ যদি ফাংশনটির নাম 'useCart' হয় তবেই এটি কাজ করবে
-  const { addToCart } = useCart() || {}; 
+  // আপনার cartStore-এর useCart হুক থেকে addToCart নেওয়া হয়েছে
+  const { addToCart } = useCart(); 
 
+  // ডিসকাউন্ট পারসেন্টেজ ক্যালকুলেশন
   const discountPercent = product.discount || (product.regular_price ? Math.round(((product.regular_price - product.selling_price) / product.regular_price) * 100) : 0);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    
     if (addToCart) {
+      // আপনার স্টোর অনুযায়ী প্রোডাক্ট অবজেক্ট পাঠানো হচ্ছে
       addToCart(product, 1);
       toast.success(`${product.name} added to cart!`);
     } else {
-      toast.error('Cart functionality is not ready yet');
+      toast.error('Cart function not found!');
     }
   };
 
@@ -37,8 +40,10 @@ const ProductCard = ({ product, showActions = true }) => {
   return (
     <Link href={`/products/${product.slug || ''}`} className="group block h-full">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:border-blue-100 transition-all duration-300 flex flex-col h-full">
+        
         {/* Image Container */}
         <div className="relative aspect-square overflow-hidden bg-gray-50">
+          {/* Loading Skeleton/Spinner */}
           <div className={`absolute inset-0 flex items-center justify-center bg-gray-100 transition-opacity duration-500 ${imageLoaded ? 'opacity-0' : 'opacity-100'}`}>
             <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
@@ -64,18 +69,20 @@ const ProductCard = ({ product, showActions = true }) => {
             )}
           </div>
 
-          {/* Action Buttons Overlay */}
+          {/* Action Buttons */}
           {showActions && (
             <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
               <button
                 onClick={handleWishlist}
                 className={`w-10 h-10 rounded-full flex items-center justify-center transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 shadow-lg ${isWishlisted ? 'bg-red-500 text-white' : 'bg-white text-gray-600 hover:text-red-500'}`}
+                title="Wishlist"
               >
                 <FaHeart size={16} />
               </button>
               <button
                 onClick={handleAddToCart}
                 className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 hover:bg-blue-700"
+                title="Add to Cart"
               >
                 <FaShoppingCart size={16} />
               </button>
