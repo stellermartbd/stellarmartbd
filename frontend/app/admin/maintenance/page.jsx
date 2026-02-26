@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { 
-  FaTools, FaServer, FaDatabase, FaCache, FaTrash, FaCheck, FaTimes,
+  FaTools, FaServer, FaDatabase, FaBuffer, FaTrash, FaCheck, FaTimes,
   FaSync, FaExclamationTriangle, FaCheckCircle, FaClock, FaPowerOff
 } from 'react-icons/fa';
 
@@ -249,3 +249,4 @@ export default function MaintenancePage() {
     </div>
   );
 }
+
