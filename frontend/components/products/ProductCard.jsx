@@ -2,87 +2,92 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { FaShoppingCart, FaHeart, FaEye, FaStar } from 'react-icons/fa';
-// '@/lib/stores/cartStore' পাথ ব্যবহার করা হয়েছে
+import { FaShoppingCart, FaStar, FaBolt } from 'react-icons/fa';
 import { useCart } from '@/lib/hooks/cartStore'; 
 import toast from 'react-hot-toast';
 
-const ProductCard = ({ product, showActions = true }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false);
+const ProductCard = ({ product }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  
-  // cartStore থেকে কাস্টম হুক useCart কল করা হয়েছে
   const cart = useCart();
-  // আপনার স্টোর কোড অনুযায়ী ফাংশনের নাম 'addToCart'
   const addToCart = cart?.addToCart;
 
-  const discountPercent = product.discount || (product.regular_price ? Math.round(((product.regular_price - product.selling_price) / product.regular_price) * 100) : 0);
+  // ডিসকাউন্ট ক্যালকুলেশন
+  const discountPercent = product.regular_price 
+    ? Math.round(((product.regular_price - product.selling_price) / product.regular_price) * 100) 
+    : 0;
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
     if (addToCart) {
       addToCart(product, 1);
       toast.success(`${product.name} added to cart!`);
-    } else {
-      toast.error('Cart functionality is not ready yet');
     }
   };
 
-  const handleWishlist = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsWishlisted(!isWishlisted);
-    toast.success(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist');
-  };
-
   return (
-    <Link href={`/products/${product.slug || ''}`} className="group block h-full">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:border-blue-100 transition-all duration-300 flex flex-col h-full">
-        {/* Image Container */}
-        <div className="relative aspect-square overflow-hidden bg-gray-50">
-          <div className={`absolute inset-0 flex items-center justify-center bg-gray-100 transition-opacity duration-500 ${imageLoaded ? 'opacity-0' : 'opacity-100'}`}>
-            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-          </div>
-          
-          <img
-            src={product.image || '/images/product-placeholder.jpg'}
-            alt={product.name || 'Product'}
-            className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${imageLoaded ? 'scale-100' : 'scale-95'}`}
+    <div className="bg-white border border-gray-100 rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 group relative flex flex-col h-full">
+      {/* Discount Badge - স্ক্রিনশটের মতো লাল ব্যাজ */}
+      {discountPercent > 0 && (
+        <div className="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm z-10">
+          -{discountPercent}%
+        </div>
+      )}
+      
+      <Link href={`/products/${product.slug || ''}`} className="block">
+        {/* Product Image Area */}
+        <div className="relative aspect-square bg-gray-50 flex items-center justify-center p-4">
+          {!imageLoaded && (
+             <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+               <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+             </div>
+          )}
+          <img 
+            src={product.image || '/images/product-placeholder.jpg'} 
+            alt={product.name} 
+            className={`max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`} 
             onLoad={() => setImageLoaded(true)}
           />
-
-          {/* Action Buttons Overlay */}
-          {showActions && (
-            <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-              <button
-                onClick={handleWishlist}
-                className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg ${isWishlisted ? 'bg-red-500 text-white' : 'bg-white text-gray-600'}`}
-              >
-                <FaHeart size={16} />
-              </button>
-              <button
-                onClick={handleAddToCart}
-                className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg"
-              >
-                <FaShoppingCart size={16} />
-              </button>
-            </div>
-          )}
         </div>
 
-        {/* Details Area */}
-        <div className="p-4 flex flex-col flex-grow">
-          <h3 className="font-bold text-gray-800 text-sm mb-2 line-clamp-2">{product.name}</h3>
-          <div className="mt-auto">
-             <span className="text-blue-600 font-extrabold text-base">৳{product.selling_price?.toLocaleString()}</span>
+        {/* Product Details Area */}
+        <div className="p-3 text-center flex flex-col flex-grow">
+          <h3 className="font-bold text-gray-800 text-xs md:text-sm uppercase tracking-tight mb-1 line-clamp-2 min-h-[32px]">
+            {product.name}
+          </h3>
+          
+          {/* Star Rating - স্ক্রিনশটের মতো হলুদ স্টার */}
+          <div className="flex justify-center text-orange-400 text-[10px] mb-1">
+             <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
+             <span className="text-gray-400 ml-1">(119)</span>
+          </div>
+
+          {/* Pricing */}
+          <div className="text-sm md:text-base font-bold text-gray-900 mt-auto">
+            ৳{product.selling_price?.toLocaleString()} 
+            {product.regular_price > product.selling_price && (
+              <span className="text-gray-400 line-through text-[11px] font-normal ml-1">
+                ৳{product.regular_price?.toLocaleString()}
+              </span>
+            )}
+          </div>
+
+          {/* Action Buttons - স্ক্রিনশটের কালার কোড অনুযায়ী */}
+          <div className="mt-3 flex flex-col gap-1.5">
+            <button 
+              onClick={handleAddToCart}
+              className="w-full bg-gray-100 text-gray-700 py-1.5 rounded font-bold text-[10px] flex items-center justify-center gap-1 hover:bg-gray-200 transition-colors"
+            >
+              <FaShoppingCart size={12} /> ADD TO CART
+            </button>
+            <button className="w-full bg-[#004a7c] text-white py-1.5 rounded font-bold text-[10px] flex items-center justify-center gap-1 hover:bg-[#00365b] transition-colors">
+              <FaBolt size={10} /> BUY NOW
+            </button>
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };
 
 export default ProductCard;
-
