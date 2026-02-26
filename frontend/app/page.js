@@ -1,4 +1,4 @@
-import { Hero } from '@/components/home/Hero';
+import { HeroSection } from '@/components/home/HeroSection';
 import { FeaturedCategories } from '@/components/home/FeaturedCategories';
 import { FlashSale } from '@/components/home/FlashSale';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
@@ -32,3 +32,4 @@ export default function HomePage() {
     </main>
   );
 }
+
