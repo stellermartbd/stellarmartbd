@@ -1,10 +1,12 @@
 'use client';
 
-import { FaBox, FaShoppingCart, FaUsers, FaTaka, FaArrowUp, FaArrowDown, FaEye, FaEdit, FaTrash } from 'react-icons/fa';
+// FaTaka সরিয়ে FaMoneyBillWave এবং অন্যান্য আইকন রাখা হয়েছে
+import { FaBox, FaShoppingCart, FaUsers, FaMoneyBillWave, FaArrowUp, FaArrowDown, FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import Link from 'next/link';
 
 const stats = [
-  { title: 'Total Revenue', value: '৳12,45,000', change: '+12.5%', icon: FaTaka, color: 'bg-green-100 text-green-600' },
+  // FaTaka এর বদলে FaMoneyBillWave ব্যবহার করা হয়েছে
+  { title: 'Total Revenue', value: '৳12,45,000', change: '+12.5%', icon: FaMoneyBillWave, color: 'bg-green-100 text-green-600' },
   { title: 'Total Orders', value: '1,245', change: '+8.2%', icon: FaShoppingCart, color: 'bg-blue-100 text-blue-600' },
   { title: 'Total Products', value: '856', change: '+3.1%', icon: FaBox, color: 'bg-purple-100 text-purple-600' },
   { title: 'Total Customers', value: '5,234', change: '+15.3%', icon: FaUsers, color: 'bg-orange-100 text-orange-600' },
