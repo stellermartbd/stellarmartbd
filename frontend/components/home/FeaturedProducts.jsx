@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { FaThLarge, FaList, FaArrowRight } from 'react-icons/fa';
 import ProductCard from '@/components/products/ProductCard';
-import ProductCardList from '@/components/products/ProductCardList';
+import ProductCardList from './ProductCardList';
 import Link from 'next/link';
 
 const products = [
@@ -77,4 +77,5 @@ export default function FeaturedProducts() {
       </div>
     </section>
   );
+
 }
