@@ -3,44 +3,20 @@ import { persist } from 'zustand/middleware';
 
 export const useAuthStore = create(
   persist(
-    (set, get) => ({
+    (set) => ({
       user: null,
-      token: null,
-      isAuthenticated: false,
       loading: false,
-
-      // লগইন ফাংশন
-      login: (userData, token) => {
-        set({ 
-          user: userData, 
-          token: token, 
-          isAuthenticated: true,
-          loading: false 
-        });
+      login: (userData) => {
+        set({ user: userData });
       },
-
-      // লগআউট ফাংশন
       logout: () => {
-        set({ 
-          user: null, 
-          token: null, 
-          isAuthenticated: false 
-        });
-        // লোকাল স্টোরেজ ক্লিয়ার করতে চাইলে
-        localStorage.removeItem('auth-storage');
+        set({ user: null });
+        localStorage.removeItem('prime-auth-storage'); // স্টোরেজ ক্লিয়ার
+        window.location.href = '/login';
       },
-
-      // ইউজার আপডেট ফাংশন
-      updateUser: (updatedData) => {
-        set((state) => ({
-          user: { ...state.user, ...updatedData }
-        }));
-      },
-
-      setLoading: (status) => set({ loading: status }),
     }),
     {
-      name: 'auth-storage', // ব্রাউজারের লোকাল স্টোরেজে এই নামে সেভ হবে
+      name: 'prime-auth-storage', // ব্রাউজারে এই নামে ডেটা সেভ থাকবে
     }
   )
 );
