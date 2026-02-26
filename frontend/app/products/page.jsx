@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { FaThLarge, FaList, FaFilter, FaSearch, FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import ProductCard from '@/components/products/ProductCard';
-// যদি ProductCardList না থাকে তবে একই ProductCard ব্যবহার করতে পারেন props পাঠিয়ে
-import ProductCardList from '@/components/products/ProductCardList'; 
+
+// সঠিক পাথ আপডেট করা হয়েছে
+import ProductCard from '@/components/common/ProductCard';
+import ProductCardList from '@/components/home/ProductCardList'; 
 
 const allProducts = [
   { id: 1, name: 'Wireless Headphones Pro', slug: 'wireless-headphones-pro', image: '/images/product-1.jpg', regular_price: 3500, selling_price: 2499, discount: 29, rating: 4.7, reviews: 234, category: 'Electronics', brand: 'Sony' },
