@@ -1,4 +1,4 @@
-import { FaShippingFast, FaShieldAlt, FaHeadsetCog, FaMoneyBillWave, FaUndo, FaStore } from 'react-icons/fa';
+import { FaShippingFast, FaShieldAlt, FaHeadset, FaMoneyBillWave, FaUndo, FaStore } from 'react-icons/fa';
 
 const features = [
   {
@@ -69,4 +69,5 @@ export default function WhyChooseUs() {
       </div>
     </section>
   );
+
 }
