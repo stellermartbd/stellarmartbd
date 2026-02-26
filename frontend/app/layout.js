@@ -1,23 +1,16 @@
 import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer'; // এখানে F যেন অবশ্যই বড় হাতের হয়
+import Footer from '@/components/layout/Footer';
 import '@/styles/globals.css';
 
 export const metadata = {
-  title: 'StellarMartBD - Bangladesh\'s Trusted Online Shopping',
-  description: 'StellarMartBD is your one-stop online shopping destination in Bangladesh. Shop electronics, fashion, home appliances and more at best prices.',
-  keywords: 'online shopping, Bangladesh, e-commerce, electronics, fashion',
-  openGraph: {
-    title: 'StellarMartBD - Bangladesh\'s Trusted Online Shopping',
-    description: 'Shop electronics, fashion, home appliances and more at best prices',
-    type: 'website',
-    locale: 'bn_BD',
-  },
+  title: 'StellarMartBD - Bangladesh\'s Trusted Online Shop',
+  description: 'Your premium destination for electronics and fashion.',
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="bn">
-      <body className="font-english">
+      <body className="bg-[#f4f7f9] font-sans">
         <Navbar />
         <main className="min-h-screen">
           {children}
