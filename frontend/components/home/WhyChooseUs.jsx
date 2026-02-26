@@ -14,7 +14,7 @@ const features = [
     color: 'bg-green-100 text-green-600',
   },
   {
-    icon: FaHeadsetCog,
+    icon: FaHeadset, // FaHeadsetCog এর বদলে FaHeadset ব্যবহার করা হয়েছে
     title: '24/7 Support',
     description: 'Round the clock customer support to assist you with any queries.',
     color: 'bg-purple-100 text-purple-600',
@@ -45,8 +45,8 @@ export default function WhyChooseUs() {
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="section-title">Why Choose StellarMartBD?</h2>
-          <p className="section-subtitle">We provide the best shopping experience</p>
+          <h2 className="section-title text-2xl font-bold">Why Choose StellarMartBD?</h2>
+          <p className="section-subtitle text-gray-500">We provide the best shopping experience</p>
         </div>
 
         {/* Features Grid */}
@@ -54,7 +54,7 @@ export default function WhyChooseUs() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="flex gap-4 p-6 rounded-xl hover:shadow-lg transition-shadow duration-300"
+              className="flex gap-4 p-6 rounded-xl hover:shadow-lg transition-shadow duration-300 border border-gray-50"
             >
               <div className={`w-14 h-14 ${feature.color} rounded-xl flex items-center justify-center flex-shrink-0`}>
                 <feature.icon size={24} />
@@ -69,5 +69,4 @@ export default function WhyChooseUs() {
       </div>
     </section>
   );
-
 }
