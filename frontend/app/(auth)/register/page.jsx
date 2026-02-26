@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { FaEye, FaEyeSlash, FaGoogle, FaFacebook, FaCheck } from 'react-icons/fa';
-// পাথ আপডেট করা হয়েছে
-import { useAuth } from '@/lib/hooks/authStore'; 
+import { FaEye, FaEyeSlash, FaGoogle, FaFacebook } from 'react-icons/fa';
+// ১. ইমপোর্ট নাম পরিবর্তন করে useAuthStore করা হয়েছে
+import { useAuthStore } from '@/lib/hooks/authStore'; 
 import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
@@ -19,8 +19,9 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [agreed, setAgreed] = useState(false);
   
-  // স্টোর থেকে register ফাংশন নেওয়া হচ্ছে
-  const { register } = useAuth();
+  // ২. useAuthStore থেকে ফাংশন নেওয়া হচ্ছে
+  // নোট: আপনার স্টোরে যদি 'register' ফাংশন না থাকে, তবে সেটি স্টোর ফাইলে যোগ করে নিন
+  const { login } = useAuthStore(); 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,35 +30,51 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // ভ্যালিডেশন
     if (!formData.name || !formData.email || !formData.password) {
-      toast.error('Please fill in all required fields');
+      toast.error('সবগুলো ঘর পূরণ করুন');
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error('পাসওয়ার্ড দুটি মিলছে না');
       return;
     }
 
     if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters');
+      toast.error('পাসওয়ার্ড অন্তত ৬ অক্ষরের হতে হবে');
       return;
     }
 
     if (!agreed) {
-      toast.error('Please agree to the terms and conditions');
+      toast.error('শর্তাবলীতে সম্মতি দিন');
       return;
     }
 
     setLoading(true);
-    const result = await register(formData);
-    setLoading(false);
+    
+    try {
+      // এখানে আপনার এপিআই কল হবে। উদাহরণ হিসেবে:
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      
+      const result = await response.json();
 
-    if (result && result.success) {
-      toast.success('Registration successful!');
-      window.location.href = '/';
-    } else {
-      toast.error(result?.error || 'Registration failed');
+      if (result && result.success) {
+        toast.success('রেজিস্ট্রেশন সফল হয়েছে!');
+        // লগইন স্টোর আপডেট করা (যদি প্রয়োজন হয়)
+        login(result.user, result.token); 
+        window.location.href = '/';
+      } else {
+        toast.error(result?.error || 'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
+      }
+    } catch (error) {
+      toast.error('সার্ভারে সমস্যা হচ্ছে, আবার চেষ্টা করুন');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -99,12 +116,12 @@ export default function RegisterPage() {
 
           {/* Register Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
               <input
                 type="text"
                 name="name"
+                required
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter your full name"
@@ -112,12 +129,12 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
               <input
                 type="email"
                 name="email"
+                required
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
@@ -125,7 +142,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Phone */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
               <input
@@ -138,13 +154,13 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Password *</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
+                  required
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Create a password"
@@ -160,12 +176,12 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Confirm Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password *</label>
               <input
                 type="password"
                 name="confirmPassword"
+                required
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Confirm your password"
@@ -173,7 +189,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Terms */}
             <label className="flex items-start gap-3 cursor-pointer">
               <input 
                 type="checkbox" 
@@ -189,7 +204,6 @@ export default function RegisterPage() {
               </span>
             </label>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
@@ -206,7 +220,6 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          {/* Login Link */}
           <p className="text-center text-gray-600 mt-6">
             Already have an account?{' '}
             <Link href="/login" className="text-blue-600 font-semibold hover:underline">
@@ -218,4 +231,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
