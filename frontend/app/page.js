@@ -8,27 +8,41 @@ import Newsletter from '@/components/home/Newsletter';
 
 export default function HomePage() {
   return (
-    <main>
-      {/* Hero Section */}
-      <HeroSection />
+    <main className="min-h-screen bg-gray-50 overflow-x-hidden">
+      {/* Hero Section - এতে সাধারণত এনিমেশন থাকে */}
+      <section className="animate-fade-in">
+        <HeroSection />
+      </section>
 
-      {/* Featured Categories */}
-      <FeaturedCategories />
+      {/* Featured Categories - একটু গ্যাপ বাড়ানো হয়েছে */}
+      <section className="py-8 md:py-12 bg-white">
+        <FeaturedCategories />
+      </section>
 
-      {/* Flash Sale */}
-      <FlashSale />
+      {/* Flash Sale - হাইলাইট করার জন্য আলাদা ব্যাকগ্রাউন্ড */}
+      <section className="py-10 bg-gray-50">
+        <FlashSale />
+      </section>
 
       {/* Featured Products */}
-      <FeaturedProducts />
+      <section className="py-12 bg-white">
+        <FeaturedProducts />
+      </section>
 
       {/* New Arrivals */}
-      <NewArrivals />
+      <section className="py-12 bg-gray-50">
+        <NewArrivals />
+      </section>
 
-      {/* Why Choose Us */}
-      <WhyChooseUs />
+      {/* Why Choose Us - ট্রাস্ট বিল্ড করার জন্য গুরুত্বপূর্ণ */}
+      <section className="py-16 bg-white border-t border-gray-100">
+        <WhyChooseUs />
+      </section>
 
-      {/* Newsletter */}
-      <Newsletter />
+      {/* Newsletter - ফুটারে সুন্দর ফিনিশিং */}
+      <section className="bg-primary-900 text-white">
+        <Newsletter />
+      </section>
     </main>
   );
 }
