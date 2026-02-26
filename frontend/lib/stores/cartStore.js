@@ -110,4 +110,5 @@ export const useCart = () => {
     isInCart: store.isInCart,
     getItemQuantity: store.getItemQuantity,
   };
+
 };
