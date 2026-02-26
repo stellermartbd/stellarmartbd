@@ -4,8 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebook } from 'react-icons/fa';
 
-// এখানে পাথটি আপডেট করা হয়েছে
-import { useAuth } from '@/lib/hooks/authStore'; 
+// ১. সঠিক নামে ইমপোর্ট করা হলো
+import { useAuthStore } from '@/lib/hooks/authStore'; 
 import toast from 'react-hot-toast';
 
 export default function LoginPage() {
@@ -14,27 +14,42 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   
-  // আপনার authStore থেকে login ফাংশনটি নেওয়া হচ্ছে
-  const { login } = useAuth();
+  // ২. সঠিক হুক ব্যবহার করা হলো
+  const { login } = useAuthStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!email || !password) {
-      toast.error('Please fill in all fields');
+      toast.error('ইমেইল এবং পাসওয়ার্ড দিন');
       return;
     }
 
     setLoading(true);
-    // login ফাংশন কল করা হচ্ছে
-    const result = await login(email, password);
-    setLoading(false);
 
-    if (result && result.success) {
-      toast.success('Login successful!');
-      window.location.href = '/';
-    } else {
-      toast.error(result?.error || 'Login failed');
+    try {
+      // ৩. এখানে আপনার এপিআই কল করতে হবে
+      // আপনার স্টোরের login() ফাংশন সরাসরি API কল করে না, এটি শুধু ডেটা সেভ করে।
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        // ৪. এপিআই থেকে পাওয়া ইউজার ডেটা এবং টোকেন স্টোরে সেভ করা হচ্ছে
+        login(result.user, result.token); 
+        toast.success('লগইন সফল হয়েছে!');
+        window.location.href = '/';
+      } else {
+        toast.error(result?.message || 'লগইন ব্যর্থ হয়েছে');
+      }
+    } catch (error) {
+      toast.error('সার্ভারে সমস্যা হচ্ছে, আবার চেষ্টা করুন');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,11 +73,11 @@ export default function LoginPage() {
 
           {/* Social Login */}
           <div className="flex gap-4 mb-6">
-            <button className="flex-1 flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            <button type="button" className="flex-1 flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
               <FaGoogle className="text-red-500" />
               <span>Google</span>
             </button>
-            <button className="flex-1 flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            <button type="button" className="flex-1 flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
               <FaFacebook className="text-blue-600" />
               <span>Facebook</span>
             </button>
@@ -76,11 +91,11 @@ export default function LoginPage() {
 
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
               <input
                 type="email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
@@ -88,12 +103,12 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
@@ -109,7 +124,6 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Remember & Forgot */}
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" className="w-4 h-4 text-blue-600 rounded border-gray-300" />
@@ -120,7 +134,6 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
@@ -137,7 +150,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Register Link */}
           <p className="text-center text-gray-600 mt-6">
             Don't have an account?{' '}
             <Link href="/register" className="text-blue-600 font-semibold hover:underline">
@@ -149,4 +161,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
