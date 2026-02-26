@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Button from '../common/Button';
+// ইমপোর্ট পাথটি আপনার jsconfig.json অনুযায়ী ঠিক করা হয়েছে
+import Button from '@/components/common/Button'; 
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
