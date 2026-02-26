@@ -1,48 +1,33 @@
 import HeroSection from '@/components/home/HeroSection';
 import FeaturedCategories from '@/components/home/FeaturedCategories';
-import FlashSale from '@/components/home/FlashSale';
 import FeaturedProducts from '@/components/home/FeaturedProducts';
-import NewArrivals from '@/components/home/NewArrivals';
 import WhyChooseUs from '@/components/home/WhyChooseUs';
-import Newsletter from '@/components/home/Newsletter';
+import { LayoutGrid } from 'lucide-react';
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-gray-50 overflow-x-hidden">
-      {/* Hero Section - এতে সাধারণত এনিমেশন থাকে */}
-      <section className="animate-fade-in">
-        <HeroSection />
-      </section>
+    <main>
+      {/* Hero Section with Slider Look */}
+      <HeroSection />
 
-      {/* Featured Categories - একটু গ্যাপ বাড়ানো হয়েছে */}
-      <section className="py-8 md:py-12 bg-white">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Section Header like Screenshot */}
+        <div className="flex items-center gap-2 mb-6 border-b-2 border-[#004a7c] pb-2">
+           <span className="bg-[#004a7c] p-1 text-white"><LayoutGrid size={18}/></span>
+           <h2 className="text-lg font-bold uppercase text-gray-800">Shop</h2>
+        </div>
+
+        {/* Featured Categories Grid */}
         <FeaturedCategories />
-      </section>
 
-      {/* Flash Sale - হাইলাইট করার জন্য আলাদা ব্যাকগ্রাউন্ড */}
-      <section className="py-10 bg-gray-50">
-        <FlashSale />
-      </section>
+        {/* Products Grid */}
+        <div className="mt-10">
+           <FeaturedProducts />
+        </div>
+      </div>
 
-      {/* Featured Products */}
-      <section className="py-12 bg-white">
-        <FeaturedProducts />
-      </section>
-
-      {/* New Arrivals */}
-      <section className="py-12 bg-gray-50">
-        <NewArrivals />
-      </section>
-
-      {/* Why Choose Us - ট্রাস্ট বিল্ড করার জন্য গুরুত্বপূর্ণ */}
-      <section className="py-16 bg-white border-t border-gray-100">
-        <WhyChooseUs />
-      </section>
-
-      {/* Newsletter - ফুটারে সুন্দর ফিনিশিং */}
-      <section className="bg-primary-900 text-white">
-        <Newsletter />
-      </section>
+      {/* Trust Badges */}
+      <WhyChooseUs />
     </main>
   );
 }
