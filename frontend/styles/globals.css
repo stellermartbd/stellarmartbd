@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+/* গুগল ফন্ট ইমপোর্ট */
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@theme {
+  /* v4-এ কাস্টম কালার বা ভেরিয়েবল এখানে দিতে হয় */
+  --color-navy: #004a7c;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    /* @apply ব্যবহার করার সময় নিশ্চিত করুন ফন্ট ফ্যামিলিগুলো সঠিকভাবে কনফিগার করা আছে */
+    @apply text-gray-800 bg-[#f4f7f9]; 
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+  }
+}
+
+@layer components {
+  .btn-buy-now {
+    @apply bg-[#004a7c] hover:bg-[#00365b] text-white font-bold py-2 px-4 rounded transition-all duration-300 text-xs uppercase flex items-center justify-center gap-1;
+  }
+
+  .btn-add-cart {
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded transition-all duration-300 text-xs uppercase flex items-center justify-center gap-1;
+  }
+  
+  .product-card {
+    @apply bg-white border border-gray-100 rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300;
+  }
+  
+  .section-title {
+    @apply text-xl md:text-2xl font-bold text-gray-800 uppercase tracking-tight;
+  }
+}
+
+@layer utilities {
+  .image-drop-shadow {
+    filter: drop-shadow(0 10px 15px rgba(0, 74, 124, 0.1));
+  }
+}
+
+/* কাস্টম স্ক্রলবার */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #004a7c;
+  @apply rounded-full;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
