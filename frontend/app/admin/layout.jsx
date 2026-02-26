@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { FaBars, FaTimes, FaTachometerAlt, FaBox, FaTags, FaShoppingCart, FaUsers, FaCog, FaChartBar, FaCog, FaEnvelope, FaBell, FaSignOutAlt, FaChevronDown } from 'react-icons/fa';
+// FaCog দুইবার ছিল, এখন একবার করে দেওয়া হয়েছে
+import { 
+  FaBars, FaTimes, FaTachometerAlt, FaBox, FaTags, 
+  FaShoppingCart, FaUsers, FaCog, FaChartBar, 
+  FaEnvelope, FaBell, FaSignOutAlt, FaChevronDown 
+} from 'react-icons/fa';
 
 const adminNavItems = [
   { icon: FaTachometerAlt, label: 'Dashboard', href: '/admin' },
@@ -40,7 +45,7 @@ export default function AdminLayout({ children }) {
             {sidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
           <Link href="/admin" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">
               S
             </div>
             <span className="font-bold text-lg">Admin Panel</span>
@@ -53,8 +58,8 @@ export default function AdminLayout({ children }) {
             <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
           </button>
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-              <span className="text-primary-600 font-semibold text-sm">A</span>
+            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+              <span className="text-blue-600 font-semibold text-sm">A</span>
             </div>
             <span className="hidden md:block font-medium">Admin</span>
           </div>
@@ -70,7 +75,7 @@ export default function AdminLayout({ children }) {
                 <div>
                   <button
                     onClick={() => toggleDropdown(index)}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-50 ${activeDropdown === index ? 'bg-primary-50 text-primary-600' : 'text-gray-700'}`}
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gray-50 ${activeDropdown === index ? 'bg-blue-50 text-blue-600' : 'text-gray-700'}`}
                   >
                     <div className="flex items-center gap-3">
                       <item.icon />
@@ -84,7 +89,7 @@ export default function AdminLayout({ children }) {
                         <Link
                           key={subIndex}
                           href={subItem.href}
-                          className="block px-4 py-2 text-sm text-gray-600 hover:text-primary-600 hover:bg-gray-50 rounded-lg"
+                          className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg"
                         >
                           {subItem.label}
                         </Link>
@@ -95,7 +100,7 @@ export default function AdminLayout({ children }) {
               ) : (
                 <Link
                   href={item.href}
-                  className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-primary-600 rounded-lg"
+                  className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg"
                 >
                   <item.icon />
                   <span>{item.label}</span>
@@ -106,7 +111,7 @@ export default function AdminLayout({ children }) {
           
           <hr className="my-4" />
           
-          <Link href="/" className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-primary-600 rounded-lg">
+          <Link href="/" className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg">
             <FaSignOutAlt />
             <span>Back to Website</span>
           </Link>
