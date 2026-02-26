@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaShoppingCart, FaHeart, FaStar, FaCheck } from 'react-icons/fa';
-import { useCart } from '@/lib/hooks/useCart';
+import { useCart } from '@/lib/stores/useCart';
 import toast from 'react-hot-toast';
 
 export default function ProductCardList({ product }) {
@@ -113,4 +113,5 @@ export default function ProductCardList({ product }) {
       </div>
     </Link>
   );
+
 }
