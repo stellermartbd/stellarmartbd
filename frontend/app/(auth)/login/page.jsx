@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebook } from 'react-icons/fa';
 
 // এখানে পাথটি আপডেট করা হয়েছে
-import { useAuth } from '@/lib/stores/authStore'; 
+import { useAuth } from '@/lib/hooks/authStore'; 
 import toast from 'react-hot-toast';
 
 export default function LoginPage() {
@@ -149,3 +149,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
