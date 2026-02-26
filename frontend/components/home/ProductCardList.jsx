@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaShoppingCart, FaHeart, FaStar, FaCheck } from 'react-icons/fa';
+import { FaShoppingCart, FaHeart, FaStar, FaCheck, FaRegHeart } from 'react-icons/fa';
 import { useCart } from '@/lib/stores/useCart';
 import toast from 'react-hot-toast';
 
@@ -11,10 +11,14 @@ export default function ProductCardList({ product }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const { addToCart } = useCart();
 
-  const discountPercent = product.discount || Math.round(((product.regular_price - product.selling_price) / product.regular_price) * 100);
+  // Discount Calculation logic
+  const discountPercent = product.discount || 
+    (product.regular_price > product.selling_price 
+      ? Math.round(((product.regular_price - product.selling_price) / product.regular_price) * 100) 
+      : 0);
 
   const handleAddToCart = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Link যেন ট্রিগার না হয়
     e.stopPropagation();
     addToCart(product, 1);
     toast.success(`${product.name} added to cart!`);
@@ -28,90 +32,87 @@ export default function ProductCardList({ product }) {
   };
 
   return (
-    <Link href={`/products/${product.slug}`} className="group">
-      <div className="card flex flex-col md:flex-row">
-        {/* Image */}
-        <div className="relative w-full md:w-48 h-48 md:h-auto bg-gray-100 flex-shrink-0">
-          <img
+    <div className="group bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 mb-4">
+      <Link href={`/products/${product.slug}`} className="flex flex-col md:flex-row">
+        
+        {/* Image Section - Next.js Optimized */}
+        <div className="relative w-full md:w-64 h-52 md:h-auto bg-gray-50 flex-shrink-0 overflow-hidden">
+          <Image
             src={product.image || '/images/product-placeholder.jpg'}
             alt={product.name}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
           {discountPercent > 0 && (
-            <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-              -{discountPercent}%
+            <div className="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold uppercase px-2 py-1 rounded-full shadow-sm">
+              {discountPercent}% OFF
             </div>
           )}
         </div>
 
-        {/* Content */}
-        <div className="flex-1 p-4 flex flex-col justify-between">
+        {/* Content Section */}
+        <div className="flex-1 p-5 flex flex-col justify-between">
           <div>
-            {/* Category */}
-            <p className="text-xs text-gray-500 mb-1">{product.category}</p>
+            <div className="flex justify-between items-start">
+              <p className="text-xs font-medium text-blue-600 uppercase tracking-wider mb-1">
+                {product.category}
+              </p>
+              <button 
+                onClick={handleWishlist}
+                className={`p-2 rounded-full transition-colors ${isWishlisted ? 'text-red-500 bg-red-50' : 'text-gray-400 hover:text-red-500 hover:bg-gray-100'}`}
+              >
+                {isWishlisted ? <FaHeart size={18} /> : <FaRegHeart size={18} />}
+              </button>
+            </div>
             
-            {/* Product Name */}
-            <h3 className="font-semibold text-lg text-gray-800 mb-2 group-hover:text-primary-600 transition-colors">
+            <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
               {product.name}
             </h3>
 
             {/* Rating */}
-            <div className="flex items-center gap-2 mb-2">
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <span key={star} className={star <= Math.round(product.rating || 4) ? 'text-yellow-400' : 'text-gray-300'}>
-                    <FaStar size={14} />
-                  </span>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center text-yellow-400">
+                {[...Array(5)].map((_, i) => (
+                  <FaStar key={i} size={14} className={i < Math.round(product.rating || 4) ? 'fill-current' : 'text-gray-300'} />
                 ))}
               </div>
-              <span className="text-sm text-gray-500">({product.reviews} reviews)</span>
+              <span className="text-xs text-gray-500 font-medium">({product.reviews || 0} reviews)</span>
             </div>
 
-            {/* Description */}
-            <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-              High quality product with premium features. Perfect for everyday use.
+            <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">
+              {product.description || "Premium gaming products with instant delivery features."}
             </p>
 
-            {/* Stock Info */}
-            <div className="flex items-center gap-2 text-sm text-green-600 mb-3">
-              <FaCheck size={12} />
-              <span>In Stock</span>
+            <div className="flex items-center gap-2 text-xs font-semibold text-green-600 bg-green-50 w-fit px-2 py-1 rounded">
+              <FaCheck size={10} />
+              <span>INSTANT DELIVERY</span>
             </div>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-50">
             {/* Price */}
-            <div className="flex items-center gap-3">
-              <span className="text-xl font-bold text-primary-600">
-                ৳{product.selling_price?.toLocaleString()}
-              </span>
+            <div className="flex flex-col">
               {product.regular_price > product.selling_price && (
-                <span className="text-sm text-gray-400 line-through">
+                <span className="text-sm text-gray-400 line-through mb-[-4px]">
                   ৳{product.regular_price?.toLocaleString()}
                 </span>
               )}
+              <span className="text-2xl font-black text-gray-900">
+                ৳{product.selling_price?.toLocaleString()}
+              </span>
             </div>
 
             {/* Actions */}
-            <div className="flex gap-2">
-              <button
-                onClick={handleWishlist}
-                className={`p-2 rounded-lg border transition-colors ${isWishlisted ? 'bg-red-50 border-red-500 text-red-500' : 'border-gray-300 text-gray-600 hover:border-primary-600 hover:text-primary-600'}`}
-              >
-                <FaHeart size={18} />
-              </button>
-              <button
-                onClick={handleAddToCart}
-                className="btn-primary py-2 px-4"
-              >
-                <FaShoppingCart size={16} />
-                <span className="ml-2">Add to Cart</span>
-              </button>
-            </div>
+            <button
+              onClick={handleAddToCart}
+              className="flex items-center gap-2 bg-gray-900 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all active:scale-95 shadow-md hover:shadow-blue-200"
+            >
+              <FaShoppingCart size={18} />
+              <span>Add to Cart</span>
+            </button>
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
-
 }
