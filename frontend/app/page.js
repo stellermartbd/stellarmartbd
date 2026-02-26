@@ -1,16 +1,16 @@
-import { HeroSection } from '@/components/home/HeroSection';
-import { FeaturedCategories } from '@/components/home/FeaturedCategories';
-import { FlashSale } from '@/components/home/FlashSale';
-import { FeaturedProducts } from '@/components/home/FeaturedProducts';
-import { NewArrivals } from '@/components/home/NewArrivals';
-import { WhyChooseUs } from '@/components/home/WhyChooseUs';
-import { Newsletter } from '@/components/home/Newsletter';
+import HeroSection from '@/components/home/HeroSection';
+import FeaturedCategories from '@/components/home/FeaturedCategories';
+import FlashSale from '@/components/home/FlashSale';
+import FeaturedProducts from '@/components/home/FeaturedProducts';
+import NewArrivals from '@/components/home/NewArrivals';
+import WhyChooseUs from '@/components/home/WhyChooseUs';
+import Newsletter from '@/components/home/Newsletter';
 
 export default function HomePage() {
   return (
     <main>
       {/* Hero Section */}
-      <Hero />
+      <HeroSection />
 
       {/* Featured Categories */}
       <FeaturedCategories />
@@ -32,4 +32,3 @@ export default function HomePage() {
     </main>
   );
 }
-
