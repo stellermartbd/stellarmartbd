@@ -6,8 +6,9 @@ import {
   FaUser, FaBox, FaHeart, FaMapMarkerAlt, 
   FaCreditCard, FaCog, FaSignOutAlt, FaEdit, FaAngleRight 
 } from 'react-icons/fa';
-// আপনার প্রজেক্টের পাথ অনুযায়ী হুক চেক করে নিন
-import { useAuth } from '@/lib/useAuth'; 
+
+// ১. পাথ এবং হুকের নাম ঠিক করা হয়েছে (stores থেকে hooks এ নেওয়া হয়েছে)
+import { useAuthStore } from '@/lib/hooks/authStore'; 
 
 const menuItems = [
   { icon: FaUser, label: 'My Profile', href: '/dashboard/profile' },
@@ -25,7 +26,8 @@ const recentOrders = [
 ];
 
 export default function DashboardPage() {
-  const { user, logout } = useAuth();
+  // ২. সঠিক হুক কল করা হয়েছে
+  const { user, logout } = useAuthStore();
 
   return (
     <div className="min-h-screen bg-gray-50 py-10">
@@ -185,7 +187,7 @@ export default function DashboardPage() {
   );
 }
 
-// Helper component for action button
+// Helper component ঠিক করা হয়েছে
 function FaEyeRightIcon({ size }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
