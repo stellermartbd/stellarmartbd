@@ -4,7 +4,6 @@ const connectDatabase = require('./src/config/database');
 
 const PORT = process.env.PORT || 5000;
 
-// Connect to Database
 connectDatabase()
   .then(() => {
     app.listen(PORT, () => {
@@ -17,13 +16,3 @@ connectDatabase()
     console.error('❌ Database connection failed:', error);
     process.exit(1);
   });
-
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err) => {
-  console.error('Unhandled Rejection:', err.message);
-});
-
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err.message);
-  process.exit(1);
-});
