@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebook, FaCheck } from 'react-icons/fa';
-import { useAuth } from '@/lib/hooks/useAuth';
+// পাথ আপডেট করা হয়েছে
+import { useAuth } from '@/lib/stores/authStore'; 
 import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
@@ -17,6 +18,8 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  
+  // স্টোর থেকে register ফাংশন নেওয়া হচ্ছে
   const { register } = useAuth();
 
   const handleChange = (e) => {
@@ -50,11 +53,11 @@ export default function RegisterPage() {
     const result = await register(formData);
     setLoading(false);
 
-    if (result.success) {
+    if (result && result.success) {
       toast.success('Registration successful!');
       window.location.href = '/';
     } else {
-      toast.error(result.error || 'Registration failed');
+      toast.error(result?.error || 'Registration failed');
     }
   };
 
@@ -64,7 +67,7 @@ export default function RegisterPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">
+            <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">
               S
             </div>
             <span className="text-2xl font-bold text-gray-900">StellarMartBD</span>
@@ -105,7 +108,7 @@ export default function RegisterPage() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter your full name"
-                className="input-field"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
 
@@ -118,7 +121,7 @@ export default function RegisterPage() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
-                className="input-field"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
 
@@ -131,7 +134,7 @@ export default function RegisterPage() {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="01xxxxxxxxx"
-                className="input-field"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
 
@@ -145,7 +148,7 @@ export default function RegisterPage() {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Create a password"
-                  className="input-field pr-12"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none pr-12"
                 />
                 <button
                   type="button"
@@ -166,7 +169,7 @@ export default function RegisterPage() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Confirm your password"
-                className="input-field"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
 
@@ -176,13 +179,13 @@ export default function RegisterPage() {
                 type="checkbox" 
                 checked={agreed}
                 onChange={(e) => setAgreed(e.target.checked)}
-                className="w-4 h-4 mt-1 text-primary-600 rounded border-gray-300" 
+                className="w-4 h-4 mt-1 text-blue-600 rounded border-gray-300" 
               />
               <span className="text-sm text-gray-600">
                 I agree to the{' '}
-                <Link href="/terms" className="text-primary-600 hover:underline">Terms of Service</Link>
+                <Link href="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>
                 {' '}and{' '}
-                <Link href="/privacy" className="text-primary-600 hover:underline">Privacy Policy</Link>
+                <Link href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
               </span>
             </label>
 
@@ -190,7 +193,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary py-4 text-lg disabled:opacity-50"
+              className="w-full bg-blue-600 text-white py-4 rounded-lg text-lg font-bold hover:bg-blue-700 transition-all disabled:opacity-50"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -206,7 +209,7 @@ export default function RegisterPage() {
           {/* Login Link */}
           <p className="text-center text-gray-600 mt-6">
             Already have an account?{' '}
-            <Link href="/login" className="text-primary-600 font-semibold hover:underline">
+            <Link href="/login" className="text-blue-600 font-semibold hover:underline">
               Login now
             </Link>
           </p>
