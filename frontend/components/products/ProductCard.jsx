@@ -1,18 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-// import Image from 'next/image'; // আপাতত অব্যবহৃত বলে কমেন্ট করা হলো
 import Link from 'next/link';
 import { FaShoppingCart, FaHeart, FaEye, FaStar } from 'react-icons/fa';
-// '@/lib/useCart' না পাওয়া গেলে নিচের লাইনটি ট্রাই করুন
-import { useCart } from '../../lib/useCart'; 
+// '@/lib/stores/cartStore' ব্যবহার করা হয়েছে কারণ আপনার ফাইলটি এখন ঐ ফোল্ডারে আছে
+import { useCart } from '@/lib/stores/cartStore'; 
 import toast from 'react-hot-toast';
 
 const ProductCard = ({ product, showActions = true }) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   
-  // useCart থেকে addToCart নেওয়ার আগে চেক করুন useCart ঠিকমতো এক্সপোর্ট করা কি না
+  // আপনার cartStore-এ যদি ফাংশনটির নাম 'useCart' হয় তবেই এটি কাজ করবে
   const { addToCart } = useCart() || {}; 
 
   const discountPercent = product.discount || (product.regular_price ? Math.round(((product.regular_price - product.selling_price) / product.regular_price) * 100) : 0);
