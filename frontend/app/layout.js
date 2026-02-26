@@ -4,14 +4,8 @@ import '@/styles/globals.css';
 
 export const metadata = {
   title: 'StellarMartBD - Bangladesh\'s Trusted Online Shopping',
-  description: 'StellarMartBD is your one-stop online shopping destination in Bangladesh. Shop electronics, fashion, home appliances and more at best prices.',
-  keywords: 'online shopping, Bangladesh, e-commerce, electronics, fashion',
-  openGraph: {
-    title: 'StellarMartBD - Bangladesh\'s Trusted Online Shopping',
-    description: 'Shop electronics, fashion, home appliances and more at best prices',
-    type: 'website',
-    locale: 'bn_BD',
-  },
+  description: 'StellarMartBD is your one-stop online shopping destination in Bangladesh.',
+  // ... বাকি মেটাডেটা ...
 };
 
 export default function RootLayout({ children }) {
@@ -26,5 +20,4 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   );
-
 }
