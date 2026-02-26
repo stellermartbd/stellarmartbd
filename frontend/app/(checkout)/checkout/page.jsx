@@ -4,11 +4,11 @@ import React from 'react';
 import Link from 'next/link';
 import { 
   FaUser, FaBox, FaHeart, FaMapMarkerAlt, 
-  FaCreditCard, FaCog, FaSignOutAlt, FaEdit, FaAngleRight 
+  FaCreditCard, FaCog, FaSignOutAlt, FaAngleRight 
 } from 'react-icons/fa';
 
-// আপনার নতুন স্ট্রাকচার অনুযায়ী পাথ আপডেট করা হয়েছে
-import { useAuth } from '@/lib/hooks/useAuth'; 
+// ১. আপনার প্রজেক্টের বর্তমান পাথ এবং হুকের নাম (useAuthStore) অনুযায়ী আপডেট করা হয়েছে
+import { useAuthStore } from '@/lib/hooks/authStore'; 
 
 const menuItems = [
   { icon: FaUser, label: 'My Profile', href: '/dashboard/profile' },
@@ -26,8 +26,8 @@ const recentOrders = [
 ];
 
 export default function DashboardPage() {
-  // useAuth থেকে ডেটা নেওয়া হচ্ছে
-  const { user, logout } = useAuth();
+  // ২. useAuthStore থেকে ডেটা এবং ফাংশন নেওয়া হচ্ছে
+  const { user, logout } = useAuthStore();
 
   return (
     <div className="min-h-screen bg-gray-50 py-10">
@@ -77,7 +77,7 @@ export default function DashboardPage() {
                 ))}
                 
                 <button
-                  onClick={() => logout && logout()} // Logout ফাংশন কল
+                  onClick={() => logout && logout()} 
                   className="flex items-center gap-4 px-4 py-3.5 text-red-500 hover:bg-red-50 rounded-2xl transition-all duration-300 w-full font-bold text-sm mt-4"
                 >
                   <FaSignOutAlt className="text-lg" />
@@ -89,7 +89,6 @@ export default function DashboardPage() {
 
           {/* Main Dashboard Content */}
           <div className="lg:col-span-9 space-y-10">
-            
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
@@ -169,7 +168,6 @@ export default function DashboardPage() {
   );
 }
 
-// Helper component for action button (নাম ঠিক করা হয়েছে)
 function FaEyeIcon({ size }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
