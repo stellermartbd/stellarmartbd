@@ -10,17 +10,17 @@ import Newsletter from '@/components/home/Newsletter';
 import connectDB from '@/lib/db';
 import Product from '@/models/Product';
 
-// বিল্ড টাইমে প্রি-রেন্ডারিং এরর এড়াতে এটি জরুরি
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   let products = [];
   try {
     await connectDB();
+    // MongoDB theke data ana hochche
     const data = await Product.find({}).limit(10).lean();
     products = JSON.parse(JSON.stringify(data));
   } catch (err) {
-    console.error("Database connection failed during build:", err);
+    console.error("Database error:", err);
   }
 
   return (
@@ -36,7 +36,6 @@ export default async function Home() {
       </section>
       <BannerSection />
       <section className="container mx-auto px-4 py-16">
-        {/* প্রপস হিসেবে ডাটা পাঠানো হচ্ছে, যদি ডাটা না থাকে খালি অ্যারে যাবে */}
         <FeaturedProducts products={products} />
       </section>
       <section className="bg-[#eef2f5] py-16">
