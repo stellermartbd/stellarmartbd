@@ -12,7 +12,7 @@ import Newsletter from '@/components/home/Newsletter';
 import connectDB from '@/lib/db'; 
 import Product from '@/models/Product';
 
-// সার্ভারকে নির্দেশ দেওয়া যাতে সে পেজটি ক্যাশ (Cache) না করে সবসময় টাটকা ডেটা দেখায়
+// বিল্ড টাইমে স্ট্যাটিক জেনারেশন বন্ধ করে ডাইনামিক রেন্ডারিং নিশ্চিত করা
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
@@ -20,32 +20,27 @@ export default async function Home() {
   let newArrivals = [];
 
   try {
-    // ডাটাবেস কানেক্ট করা
     await connectDB();
 
-    // ১. জনপ্রিয় পণ্য আনা (Featured Collection)
+    // ডাটাবেস থেকে পণ্য আনা
     const featuredData = await Product.find({ isFeatured: true }).limit(8).lean();
     featuredProducts = JSON.parse(JSON.stringify(featuredData));
 
-    // ২. নতুন পণ্য আনা (New Arrivals)
     const arrivalsData = await Product.find().sort({ createdAt: -1 }).limit(8).lean();
     newArrivals = JSON.parse(JSON.stringify(arrivalsData));
 
   } catch (error) {
-    console.error("Database Fetching Error:", error);
-    // ডাটা না পেলে খালি অ্যারে থাকবে যাতে সাইট ক্র্যাশ না করে
+    console.error("Data Fetching Error:", error);
   }
 
   return (
     <main className="min-h-screen bg-[#f4f7f9] overflow-x-hidden">
       <HeroSection />
 
-      {/* ক্যাটাগরি সেকশন */}
       <div className="container mx-auto px-4 py-10">
         <CategorySection />
       </div>
 
-      {/* ফ্ল্যাশ সেল */}
       <section className="bg-white py-12 shadow-inner">
         <div className="container mx-auto px-4">
           <FlashSale />
@@ -54,12 +49,11 @@ export default async function Home() {
 
       <BannerSection />
 
-      {/* ৫. ডাইনামিক জনপ্রিয় পণ্য */}
+      {/* ডাইনামিক ডাটা প্রোডাক্ট গ্রিডে পাঠানো হচ্ছে */}
       <section className="container mx-auto px-4 py-16">
         <FeaturedProducts products={featuredProducts} />
       </section>
 
-      {/* ৬. ডাইনামিক নিউ অ্যারাইভালস */}
       <section className="bg-[#eef2f5] py-16">
         <div className="container mx-auto px-4">
           <NewArrivals products={newArrivals} />
