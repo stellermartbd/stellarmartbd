@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FaFire, FaArrowRight, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-// নিশ্চিত হোন যে আপনার ProductCard ফাইলটি সঠিক জায়গায় আছে
 import ProductCard from '../products/ProductCard'; 
 
 const flashProducts = [
@@ -20,8 +19,10 @@ const flashProducts = [
 const FlashSale = () => {
   const [timeLeft, setTimeLeft] = useState({ hours: 8, minutes: 45, seconds: 30 });
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [mounted, setMounted] = useState(false); // Hydration error bachte
 
   useEffect(() => {
+    setMounted(true);
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
@@ -33,8 +34,13 @@ const FlashSale = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % (flashProducts.length / 4));
-  const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + flashProducts.length / 4) % (flashProducts.length / 4));
+  if (!mounted) return null; // Server e client-specific code avoid korte
+
+  const itemsPerView = 4;
+  const maxIndex = Math.ceil(flashProducts.length / itemsPerView);
+
+  const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % maxIndex);
+  const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + maxIndex) % maxIndex);
 
   const TimerBox = ({ value, label }) => (
     <div className="bg-orange-600 text-white px-3 py-2 rounded-lg text-center min-w-[64px] shadow-md">
@@ -58,7 +64,6 @@ const FlashSale = () => {
             </div>
           </div>
 
-          {/* Timer Display */}
           <div className="flex items-center gap-3 bg-white p-3 rounded-2xl shadow-sm border border-orange-100">
             <span className="text-orange-600 font-bold text-sm uppercase px-2">Ends In:</span>
             <div className="flex items-center gap-2">
@@ -71,17 +76,16 @@ const FlashSale = () => {
           </div>
         </div>
 
-        {/* Products Carousel Area */}
         <div className="relative group">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {flashProducts.slice(currentIndex * 4, currentIndex * 4 + 4).map((product) => (
+            {/* Safe Slicing with Optional Chaining */}
+            {flashProducts?.slice(currentIndex * itemsPerView, (currentIndex * itemsPerView) + itemsPerView).map((product) => (
               <div key={product.id} className="transform transition duration-300 hover:-translate-y-2">
                 <ProductCard product={product} />
               </div>
             ))}
           </div>
 
-          {/* Navigation Arrows */}
           <button onClick={prevSlide} className="absolute -left-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center text-orange-600 hover:bg-orange-600 hover:text-white transition-all z-20 opacity-0 group-hover:opacity-100 border border-orange-50">
             <FaChevronLeft size={20} />
           </button>
@@ -90,7 +94,6 @@ const FlashSale = () => {
           </button>
         </div>
 
-        {/* View All Button */}
         <div className="text-center mt-12">
           <Link href="/flash-sale" className="inline-flex items-center gap-3 px-8 py-3 bg-white border-2 border-orange-500 text-orange-600 font-bold rounded-full hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-lg shadow-orange-200">
             Explore All Deals <FaArrowRight />
