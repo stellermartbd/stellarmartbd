@@ -6,20 +6,20 @@ import { FaFire, FaArrowRight, FaChevronLeft, FaChevronRight } from 'react-icons
 import ProductCard from '../products/ProductCard'; 
 
 const flashProducts = [
-  { id: 1, name: 'Wireless Earbuds Pro', image: '/images/product-1.jpg', regular_price: 2500, selling_price: 1499, discount: 40, rating: 4.5, reviews: 128 },
-  { id: 2, name: 'Smart Watch Series 5', image: '/images/product-2.jpg', regular_price: 4500, selling_price: 2999, discount: 33, rating: 4.8, reviews: 256 },
-  { id: 3, name: 'Bluetooth Speaker', image: '/images/product-3.jpg', regular_price: 1800, selling_price: 999, discount: 44, rating: 4.3, reviews: 89 },
-  { id: 4, name: 'Phone Case Premium', image: '/images/product-4.jpg', regular_price: 800, selling_price: 399, discount: 50, rating: 4.6, reviews: 312 },
-  { id: 5, name: 'USB Hub 7 Port', image: '/images/product-5.jpg', regular_price: 1200, selling_price: 699, discount: 42, rating: 4.2, reviews: 67 },
-  { id: 6, name: 'Laptop Stand Aluminum', image: '/images/product-6.jpg', regular_price: 1500, selling_price: 899, discount: 40, rating: 4.7, reviews: 145 },
-  { id: 7, name: 'Wireless Mouse', image: '/images/product-7.jpg', regular_price: 900, selling_price: 499, discount: 45, rating: 4.4, reviews: 198 },
-  { id: 8, name: 'LED Desk Lamp', image: '/images/product-8.jpg', regular_price: 1600, selling_price: 799, discount: 50, rating: 4.5, reviews: 87 },
+  { id: 1, name: 'Wireless Earbuds Pro', image: '/images/product-1.jpg', selling_price: 1499, regular_price: 2500, discount: 40, rating: 4.5, reviews: 128 },
+  { id: 2, name: 'Smart Watch Series 5', image: '/images/product-2.jpg', selling_price: 2999, regular_price: 4500, discount: 33, rating: 4.8, reviews: 256 },
+  { id: 3, name: 'Bluetooth Speaker', image: '/images/product-3.jpg', selling_price: 999, regular_price: 1800, discount: 44, rating: 4.3, reviews: 89 },
+  { id: 4, name: 'Phone Case Premium', image: '/images/product-4.jpg', selling_price: 399, regular_price: 800, discount: 50, rating: 4.6, reviews: 312 },
+  { id: 5, name: 'USB Hub 7 Port', image: '/images/product-5.jpg', selling_price: 699, regular_price: 1200, discount: 42, rating: 4.2, reviews: 67 },
+  { id: 6, name: 'Laptop Stand Aluminum', image: '/images/product-6.jpg', selling_price: 899, regular_price: 1500, discount: 40, rating: 4.7, reviews: 145 },
+  { id: 7, name: 'Wireless Mouse', image: '/images/product-7.jpg', selling_price: 499, regular_price: 900, discount: 45, rating: 4.4, reviews: 198 },
+  { id: 8, name: 'LED Desk Lamp', image: '/images/product-8.jpg', selling_price: 799, regular_price: 1600, discount: 50, rating: 4.5, reviews: 87 },
 ];
 
 const FlashSale = () => {
+  const [mounted, setMounted] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ hours: 8, minutes: 45, seconds: 30 });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [mounted, setMounted] = useState(false); // Hydration error bachte
 
   useEffect(() => {
     setMounted(true);
@@ -34,70 +34,44 @@ const FlashSale = () => {
     return () => clearInterval(timer);
   }, []);
 
-  if (!mounted) return null; // Server e client-specific code avoid korte
+  // Hydration Error theke bachte (Very Important)
+  if (!mounted) return <div className="py-12 bg-orange-50 h-96"></div>;
 
   const itemsPerView = 4;
   const maxIndex = Math.ceil(flashProducts.length / itemsPerView);
-
   const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % maxIndex);
   const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + maxIndex) % maxIndex);
 
   const TimerBox = ({ value, label }) => (
-    <div className="bg-orange-600 text-white px-3 py-2 rounded-lg text-center min-w-[64px] shadow-md">
-      <span className="block text-xl font-bold leading-none">{String(value).padStart(2, '0')}</span>
-      <span className="text-[10px] uppercase font-semibold">{label}</span>
+    <div className="bg-orange-600 text-white px-3 py-2 rounded-lg text-center min-w-[64px]">
+      <span className="block text-xl font-bold">{String(value).padStart(2, '0')}</span>
+      <span className="text-[10px] uppercase">{label}</span>
     </div>
   );
 
   return (
-    <section className="py-12 bg-gradient-to-br from-orange-50 to-red-50 overflow-hidden">
+    <section className="py-12 bg-gradient-to-br from-orange-50 to-red-50">
       <div className="container mx-auto px-4">
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
           <div className="flex items-center gap-4">
-            <div className="bg-orange-500 p-3 rounded-full animate-pulse">
-              <FaFire className="text-white text-2xl" />
-            </div>
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800 tracking-tight">Flash Sale</h2>
-              <p className="text-gray-500 font-medium italic">Don't miss out - Limited stock!</p>
-            </div>
+            <div className="bg-orange-500 p-3 rounded-full"><FaFire className="text-white text-2xl" /></div>
+            <h2 className="text-3xl font-bold">Flash Sale</h2>
           </div>
-
-          <div className="flex items-center gap-3 bg-white p-3 rounded-2xl shadow-sm border border-orange-100">
-            <span className="text-orange-600 font-bold text-sm uppercase px-2">Ends In:</span>
-            <div className="flex items-center gap-2">
-              <TimerBox value={timeLeft.hours} label="Hrs" />
-              <span className="text-orange-500 font-bold text-2xl">:</span>
-              <TimerBox value={timeLeft.minutes} label="Min" />
-              <span className="text-orange-500 font-bold text-2xl">:</span>
-              <TimerBox value={timeLeft.seconds} label="Sec" />
-            </div>
+          <div className="flex items-center gap-2">
+            <TimerBox value={timeLeft.hours} label="Hrs" />
+            <TimerBox value={timeLeft.minutes} label="Min" />
+            <TimerBox value={timeLeft.seconds} label="Sec" />
           </div>
         </div>
 
-        <div className="relative group">
+        <div className="relative">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {/* Safe Slicing with Optional Chaining */}
-            {flashProducts?.slice(currentIndex * itemsPerView, (currentIndex * itemsPerView) + itemsPerView).map((product) => (
-              <div key={product.id} className="transform transition duration-300 hover:-translate-y-2">
-                <ProductCard product={product} />
-              </div>
+            {flashProducts.slice(currentIndex * itemsPerView, (currentIndex * itemsPerView) + itemsPerView).map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
-
-          <button onClick={prevSlide} className="absolute -left-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center text-orange-600 hover:bg-orange-600 hover:text-white transition-all z-20 opacity-0 group-hover:opacity-100 border border-orange-50">
-            <FaChevronLeft size={20} />
-          </button>
-          <button onClick={nextSlide} className="absolute -right-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center text-orange-600 hover:bg-orange-600 hover:text-white transition-all z-20 opacity-0 group-hover:opacity-100 border border-orange-50">
-            <FaChevronRight size={20} />
-          </button>
-        </div>
-
-        <div className="text-center mt-12">
-          <Link href="/flash-sale" className="inline-flex items-center gap-3 px-8 py-3 bg-white border-2 border-orange-500 text-orange-600 font-bold rounded-full hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-lg shadow-orange-200">
-            Explore All Deals <FaArrowRight />
-          </Link>
+          <button onClick={prevSlide} className="absolute -left-5 top-1/2 bg-white p-3 rounded-full shadow-lg z-10"><FaChevronLeft /></button>
+          <button onClick={nextSlide} className="absolute -right-5 top-1/2 bg-white p-3 rounded-full shadow-lg z-10"><FaChevronRight /></button>
         </div>
       </div>
     </section>
