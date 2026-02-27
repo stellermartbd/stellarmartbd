@@ -2,23 +2,20 @@
 import { FaShoppingCart, FaStar, FaBolt } from 'react-icons/fa';
 
 export default function ProductCard({ product }) {
-  // FlashSale data format onushare name gulo thik kora holo
+  // FlashSale data-r sathe mil rekhe variable name thik kora holo
   const sellingPrice = product.selling_price || product.price || 0;
   const regularPrice = product.regular_price || product.oldPrice || 0;
   const discount = product.discount || 0;
 
   return (
     <div className="bg-white border border-gray-100 rounded-lg overflow-hidden hover:shadow-2xl transition-all duration-300 group flex flex-col h-full relative">
-      {/* Discount Badge */}
       {discount > 0 && (
         <div className="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded z-10">
           -{discount}%
         </div>
       )}
 
-      {/* Image */}
       <div className="aspect-square bg-gray-50 flex items-center justify-center p-4">
-        {/* product.image thik ache */}
         <img 
           src={product.image || '/placeholder.png'} 
           alt={product.name} 
@@ -26,7 +23,6 @@ export default function ProductCard({ product }) {
         />
       </div>
 
-      {/* Details */}
       <div className="p-3 text-center flex flex-col flex-grow">
         <h3 className="font-bold text-gray-800 text-xs md:text-sm uppercase mb-1 line-clamp-2 min-h-[32px]">
           {product.name || 'Untitled Product'}
