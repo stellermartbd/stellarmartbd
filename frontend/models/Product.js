@@ -1,27 +1,12 @@
 import mongoose from 'mongoose';
 
 const ProductSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  description: String,
-  image: {
-    type: String,
-    required: true,
-  },
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  image: { type: String, required: true },
+  isFeatured: { type: Boolean, default: false }, // Featured সেকশনের জন্য
   category: String,
-  stock: {
-    type: Number,
-    default: 0,
-  }
+  stock: { type: Number, default: 0 }
 }, { timestamps: true });
 
-// যদি আগে থেকে মডেল তৈরি থাকে তবে সেটি ব্যবহার করবে, নয়তো নতুন তৈরি করবে
-const Product = mongoose.models.Product || mongoose.model('Product', ProductSchema);
-
-export default Product;
+export default mongoose.models.Product || mongoose.model('Product', ProductSchema);
