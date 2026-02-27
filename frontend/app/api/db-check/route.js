@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 // আপনার ডেটাবেস কানেকশন ফাইলটি ইমপোর্ট করুন (যেমন mongoose বা prisma)
-import dbConnect from '@/lib/dbConnect'; 
+import db from '@/lib/db'; 
 
 export async function GET() {
   try {
