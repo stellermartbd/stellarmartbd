@@ -4,7 +4,7 @@ import HeroSection from '@/components/home/HeroSection';
 import FlashSale from '@/components/home/FlashSale';
 import FeaturedProducts from '@/components/home/FeaturedProducts';
 import Newsletter from '@/components/home/Newsletter';
-import { connectDB } from '@/lib/mongodb';
+import { connectDB } from '@/lib/db';
 import Product from '@/models/Product';
 
 export default async function Home() {
@@ -32,3 +32,4 @@ export default async function Home() {
     </>
   );
 }
+
